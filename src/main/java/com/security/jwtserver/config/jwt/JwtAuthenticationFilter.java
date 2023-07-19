@@ -1,5 +1,7 @@
 package com.security.jwtserver.config.jwt;
 
+import com.auth0.jwt.JWT;
+import com.auth0.jwt.algorithms.Algorithm;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.security.jwtserver.config.auth.PrincipalDetails;
 import com.security.jwtserver.model.User;
@@ -9,6 +11,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import java.io.BufferedReader;
 import java.io.IOException;
+import java.util.Date;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -89,6 +92,22 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
 			HttpServletResponse response, FilterChain chain, Authentication authResult)
 			throws IOException, ServletException {
 		System.out.println("successfulAuthentication 이 실행됨, 인증이 완료되었음");
-		super.successfulAuthentication(request, response, chain, authResult);
+		PrincipalDetails principalDetails = (PrincipalDetails) authResult.getPrincipal();
+
+		// jwt 토큰 만들기 - 빌더패턴
+		// RSA 방식(공개키 개인키 방식)은 아니고 Hash 방식(secret 키를 갖는 방식)...
+		String jwtToken = JWT.create()
+				//.withSubject(principalDetails.getUsername())
+				.withSubject("cos 토큰")
+				//.withExpiresAt(new Date(System.currentTimeMillis()+JwtProperties.EXPIRATION_TIME)) // 만료시간
+				.withExpiresAt(new Date(System.currentTimeMillis()+(60000*10))) // 60000 =1분
+				.withClaim("id", principalDetails.getUser().getId())
+				.withClaim("username", principalDetails.getUser().getUsername())
+				//.sign(Algorithm.HMAC512(JwtProperties.SECRET)); // SECRET = 사이트만 알고있는 고유값
+				.sign(Algorithm.HMAC512("cos"));
+		System.out.println("jwtToken = " + jwtToken);
+
+
+		response.addHeader("Authorization","Bearer " + jwtToken);
 	}
 }
