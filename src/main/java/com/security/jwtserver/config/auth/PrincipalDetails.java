@@ -3,9 +3,10 @@ package com.security.jwtserver.config.auth;
 import com.security.jwtserver.model.User;
 import java.util.ArrayList;
 import java.util.Collection;
+import lombok.Data;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
-
+@Data
 public class PrincipalDetails implements UserDetails {
 
 	private User user;
