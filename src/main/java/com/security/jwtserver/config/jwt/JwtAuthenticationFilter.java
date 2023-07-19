@@ -110,4 +110,6 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
 
 		response.addHeader("Authorization","Bearer " + jwtToken);
 	}
+	// 여기까지 로그인도하고 JWT 토큰도 만들어줬다.
+	// 이제 로그인한상태에서 서버에 개인정보를 요청하면 서버에서 JWT 토큰이 유효한지 판단을 해서 요청을 받을지말지 결정한다.
 }

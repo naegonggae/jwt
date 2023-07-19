@@ -1,8 +1,10 @@
 package com.security.jwtserver.config;
 
 import com.security.jwtserver.config.jwt.JwtAuthenticationFilter;
+import com.security.jwtserver.config.jwt.JwtAuthorizationFilter;
 import com.security.jwtserver.filter.MyFilter1;
 import com.security.jwtserver.filter.MyFilter3;
+import com.security.jwtserver.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -23,11 +25,14 @@ public class SecurityConfig {
 
 	private final CorsFilter corsFilter;
 	private final CorsConfig corsConfig;
+	private final UserRepository userRepository;
 
 	@Bean
 	public SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity) throws Exception {
+		System.out.println("필터 시작");
+
 		httpSecurity
-				.addFilterBefore(new MyFilter3(), SecurityContextHolderFilter.class) // 이렇게하면 시큐리티 필터보다 엄청 먼저 실행됨
+				//.addFilterBefore(new MyFilter3(), SecurityContextHolderFilter.class) // 이렇게하면 시큐리티 필터보다 엄청 먼저 실행됨
 				// 근데 궅이 시큐리티 필터에 걸필요는 없고 다른곳에 걸거같음 - 확인만 함
 				// 달면 오류남 MyFilter 는 시큐리티필터가 아니고 그냥 필터라서 시큐리티 체인에 들어가지못함그래서 시큐리티 체인이 시작되기전이나 후에 넣어라 해서 조치해줌
 				.csrf().disable()
@@ -49,6 +54,7 @@ public class SecurityConfig {
 				.requestMatchers("/api/v1/manager**")
 				.hasAnyRole("ADMIN", "MANAGER")
 				.anyRequest().permitAll();
+		System.out.println("필터 종료");
 
 		return httpSecurity.build();
 	}
@@ -59,8 +65,8 @@ public class SecurityConfig {
 			AuthenticationManager authenticationManager = http.getSharedObject(AuthenticationManager.class);
 			http
 					.addFilter(corsConfig.corsFilter())
-					.addFilter(new JwtAuthenticationFilter(authenticationManager));
-					//.addFilter(new JwtAuthorizationFilter(authenticationManager, userRepository));
+					.addFilter(new JwtAuthenticationFilter(authenticationManager))
+					.addFilter(new JwtAuthorizationFilter(authenticationManager, userRepository));
 		}
 	}
 }

@@ -6,7 +6,7 @@ import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
-@Configuration
+//@Configuration
 public class FilterConfig {
 	// 필터를 직접 만들어버림 시큐리티 필터에 커스텀 필터를 적용시키지 않고 config 하나 파서 필터를 적용가능하다
 	// 순서는 시큐리티 필터가 실행되고 그 다음에 실행된다.
