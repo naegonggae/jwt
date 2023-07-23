@@ -8,7 +8,6 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
-//http://localhost:8080/login 할때 실행 -> 지금여기서 동작을 못함
 @Service
 @RequiredArgsConstructor
 public class PrincipalDetailsService implements UserDetailsService {
@@ -17,10 +16,12 @@ public class PrincipalDetailsService implements UserDetailsService {
 
 	@Override
 	public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-		System.out.println("PrincipalDetailsService 의 loadUserByUsername 실행");
+		System.out.println("PrincipalDetailsService - loadUserByUsername 실행");
 
 		User userEntity = userRepository.findByUsername(username);
-		System.out.println("userEntity = " + userEntity);
+		System.out.println("PrincipalDetailsService - userEntity = " + userEntity);
+		System.out.println("PrincipalDetailsService - loadUserByUsername 종료");
+
 		return new PrincipalDetails(userEntity);
 	}
 }

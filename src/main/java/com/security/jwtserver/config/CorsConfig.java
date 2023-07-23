@@ -6,6 +6,7 @@ import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 import org.springframework.web.filter.CorsFilter;
 
+// cors 설정을 필터를 하나 만들어서 해줬다.
 @Configuration
 public class CorsConfig {
 
@@ -17,6 +18,7 @@ public class CorsConfig {
 		config.addAllowedOrigin("*"); // 모든 ip 응답을 허용하겠다
 		config.addAllowedHeader("*"); // 모든 헤더 응답을 허용하겠다.
 		config.addAllowedMethod("*"); // 모든 get, poet, put, delete, patch 요청을 허용하겠다.
+
 		source.registerCorsConfiguration("/api/**", config);
 		return new CorsFilter(source);
 	}

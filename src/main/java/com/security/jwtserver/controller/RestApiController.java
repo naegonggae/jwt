@@ -15,11 +15,13 @@ import org.springframework.web.bind.annotation.RestController;
 //@CrossOrigin // 이거는 인증이 필요하지않은 요청만 허용됨 그래서 SecurityConfig 에서 cors 필터를 적용시킨다.
 @RestController
 @RequiredArgsConstructor
+// @CrossOrigin // CORS 허용
 public class RestApiController {
 
 	private final BCryptPasswordEncoder bCryptPasswordEncoder;
 	private final UserRepository userRepository;
 
+	// 모든 사람이 접근 가능
 	@GetMapping("/home")
 	public String home() {
 		return "<h1>home</h1>";
@@ -41,7 +43,7 @@ public class RestApiController {
 		System.out.println("principal : " + principal.getUser().getId());
 		System.out.println("principal : " + principal.getUser().getUsername());
 		System.out.println("principal : " + principal.getUser().getPassword());
-		System.out.println("principal = " + principal.getUser().getRoleList());
+		System.out.println("principal : " + principal.getUser().getRoleList());
 
 		return "<h1>user</h1>";
 	}
